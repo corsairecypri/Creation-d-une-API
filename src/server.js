@@ -133,7 +133,7 @@ app.put("/api/products/:id", (req, res) => {
   const { error } = schema.validate(body)
 
   /*Si non détecte une erreur dans la requête*/ 
-  f(error) {
+  if(error) {
     res.status(400).send(`Bad Request!\n${error.details[0].message}`)
   }
   
@@ -173,7 +173,7 @@ app.get("/api/products/:id", (req, res) => {
   }
 
   /*Si tout va bien on envoie le produit choisi */
-  
+
   res.status(200).send(product)
 }) 
 
