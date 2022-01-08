@@ -62,7 +62,7 @@ app.delete("/api/products/:id", (req, res) => {
   const id = parseInt(req.params.id);
 
   /*On le recherche avec la méthode find et on
-  stocke le résultat dans la variable pr*/
+  stocke le résultat dans la variable product*/
 
   const product = products.find((product) => {
     return product.id === id;
@@ -103,7 +103,7 @@ app.put("/api/products/:id", (req, res) => {
     return res.status(404).send(`Product with id = ${id} does not exist!`)
   }
 
-  /*Sinon, on stacke la requête dans la variable body*/ 
+  /*Sinon, on stocke la requête dans la variable body*/ 
 
   const body = req.body;
 
@@ -132,7 +132,7 @@ app.put("/api/products/:id", (req, res) => {
   
   const { error } = schema.validate(body)
 
-  /*Si non détecte une erreur dans la requête*/ 
+  /*Si on détecte une erreur dans la requête*/ 
   if(error) {
     res.status(400).send(`Bad Request!\n${error.details[0].message}`)
   }
