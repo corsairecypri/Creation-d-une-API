@@ -19,7 +19,6 @@ app.use(express.json());
 
 app.use(morgan("combined"));
 
-
 /*------------ Les requêtes GET ------------------*/
 
 app.get("", (req, res) => {
@@ -85,25 +84,24 @@ app.delete("/api/products/:id", (req, res) => {
 
 /*------------ La requête PUT ------------------*/
 
-/*Le verbe "put" permet d'updater*/ 
+/*Le verbe "put" permet d'updater*/
 
 app.put("/api/products/:id", (req, res) => {
-
-  /*Comme d'habitude on stocke l'id et on fait la recherche*/ 
+  /*Comme d'habitude on stocke l'id et on fait la recherche*/
 
   const id = parseInt(req.params.id);
 
   const product = products.find((product) => {
-    return product.id === id
-  })
+    return product.id === id;
+  });
 
-  /*Si erreur 404*/ 
+  /*Si erreur 404*/
 
-  if(!product) {
-    return res.status(404).send(`Product with id = ${id} does not exist!`)
+  if (!product) {
+    return res.status(404).send(`Product with id = ${id} does not exist!`);
   }
 
-  /*Sinon, on stocke la requête dans la variable body*/ 
+  /*Sinon, on stocke la requête dans la variable body*/
 
   const body = req.body;
 
@@ -111,71 +109,66 @@ app.put("/api/products/:id", (req, res) => {
   schéma que le body de la requête doit suivre */
 
   const schema = Joi.object({
-
     title: Joi.string(),
     price: Joi.number(),
     description: Joi.string(),
     category: Joi.string(),
     image: Joi.string(),
-   
+
     rating: {
-        rate: Joi.number(),
-        count: Joi.number()
-    }
-  })
+      rate: Joi.number(),
+      count: Joi.number(),
+    },
+  });
 
   /*On vérifie si le body de la requête
-  obéit au schéma*/ 
+  obéit au schéma*/
 
   /*On déstructure également 
-  la propriété "error" de l'objet schema*/ 
-  
-  const { error } = schema.validate(body)
+  la propriété "error" de l'objet schema*/
 
-  /*Si on détecte une erreur dans la requête*/ 
-  if(error) {
-    res.status(400).send(`Bad Request!\n${error.details[0].message}`)
+  const { error } = schema.validate(body);
+
+  /*Si on détecte une erreur dans la requête*/
+  if (error) {
+    res.status(400).send(`Bad Request!\n${error.details[0].message}`);
   }
-  
+
   /*Si la requête est acceptée, on fait une boucle
   pour modifier les infos (propriétés) du produit
-  qui doivent être modifiées*/ 
+  qui doivent être modifiées*/
 
-  for(let property in req.body) {
-    product[property] = req.body[property]
+  for (let property in req.body) {
+    product[property] = req.body[property];
   }
 
   /*Ensuite on envoie le produit modifié au client */
   res.status(200).send(product);
-  
-    
-  
-})
+});
 
 /*------------ La requête GET pour
 un article en particulier ------------------*/
 
-/*On détaile un id dans l'URL*/ 
+/*On détaile un id dans l'URL*/
 
 app.get("/api/products/:id", (req, res) => {
-  
   /*On récupère l'id */
   const id = parseInt(req.params.id);
 
-  /*On cherche le produit*/ 
+  /*On cherche le produit*/
   const product = products.find((product) => {
-    return product.id === id
-  })
+    return product.id === id;
+  });
 
-  /*Si on ne trouve pas le produit*/ 
-  if(!product) {
-    return res.status(404).send(`Product with id = ${id} does not exist!`)
+  /*Si on ne trouve pas le produit*/
+  if (!product) {
+    return res.status(404).send(`Product with id = ${id} does not exist!`);
   }
 
   /*Si tout va bien on envoie le produit choisi */
 
-  res.status(200).send(product)
-}) 
+  res.status(200).send(product);
+});
 
 /*----------- Fin des requêtes -------------- */
 
@@ -184,6 +177,6 @@ console.log(products);
 /*On écoute l'app sur le port 3000 ou 
 le port de l'environnement*/
 
-app.listen(process.env.PORT || 3000, () =>
-  console.log("Listening on port 3000...")
-);
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => console.log(`Listening on port ${port}...`));
